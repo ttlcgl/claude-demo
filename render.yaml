@@ -1,0 +1,23 @@
+# Render.com infrastructure-as-code for the Tic Tac Toe backend.
+#
+# Deploys the Express + Socket.IO server as a long-running Node web service.
+# Render is used (over serverless platforms) because Socket.IO requires
+# persistent WebSocket connections, which serverless functions break.
+#
+# After first deploy, set CORS_ORIGIN in the Render dashboard to your
+# Vercel frontend URL (e.g. https://tic-tac-toe.vercel.app).
+
+services:
+  - type: web
+    name: tic-tac-toe-backend
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN
+        sync: false  # Set per-environment in the Render dashboard.
